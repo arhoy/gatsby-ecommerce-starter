@@ -1,10 +1,10 @@
 import React from 'react'
 import {graphql, useStaticQuery} from 'gatsby'
 import get from 'lodash/get'
-import {Image, Header} from 'semantic-ui-react'
+import {Header} from 'semantic-ui-react'
+import {FaHeartbeat} from 'react-icons/fa'
 import ProductList from '../components/ProductList'
 import SEO from '../components/SEO'
-import logo from '../images/ill-short-dark.svg'
 import Layout from '../components/Layout'
 
 const StoreIndex = ({location}) => {
@@ -15,28 +15,21 @@ const StoreIndex = ({location}) => {
           title
         }
       }
+
       allMoltinProduct {
-        edges {
-          node {
-            id
-            name
-            description
-            background_colour
-            mainImageHref
-            meta {
-              display_price {
-                with_tax {
-                  amount
-                  currency
-                  formatted
-                }
-              }
-            }
-            mainImage {
-              childImageSharp {
-                sizes(maxWidth: 600) {
-                  ...GatsbyImageSharpSizes
-                }
+        nodes {
+          id
+          name
+          price {
+            amount
+            currency
+          }
+          slug
+          sku
+          mainImage {
+            childImageSharp {
+              fluid(maxWidth: 400) {
+                src
               }
             }
           }
@@ -46,8 +39,8 @@ const StoreIndex = ({location}) => {
   `)
 
   const siteTitle = get(data, 'site.siteMetadata.title')
-  const products = get(data, 'allMoltinProduct.edges')
-  const filterProductsWithoutImages = products.filter(v => v.node.mainImageHref)
+  const products = get(data, 'allMoltinProduct.nodes')
+
   return (
     <Layout location={location}>
       <SEO title={siteTitle} />
@@ -65,10 +58,11 @@ const StoreIndex = ({location}) => {
             margin: '0 auto',
           }}
         >
-          <Image src={logo} alt="logo" />
+          {/* <Image src={logo} alt="logo" /> */}
+          <FaHeartbeat />
         </Header.Content>
       </Header>
-      <ProductList products={filterProductsWithoutImages} />
+      <ProductList products={products} />
     </Layout>
   )
 }

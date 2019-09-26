@@ -39,37 +39,23 @@ class ProductPageTemplate extends React.PureComponent {
 export default ProductPageTemplate
 
 export const pageQuery = graphql`
-  query ProductsQuery($id: String!) {
-    allMoltinProduct(filter: {id: {eq: $id}}) {
-      edges {
-        node {
-          id
-          name
-          description
-          meta {
-            display_price {
-              with_tax {
-                amount
-                currency
-                formatted
-              }
+  query {
+    allMoltinProduct {
+      nodes {
+        id
+        name
+        price {
+          amount
+          currency
+        }
+        slug
+        sku
+        mainImage {
+          childImageSharp {
+            fluid(maxWidth: 400) {
+              src
             }
           }
-          mainImageHref
-          mainImage {
-            childImageSharp {
-              sizes(maxWidth: 400) {
-                ...GatsbyImageSharpSizes
-              }
-            }
-          }
-          slug
-          material
-          max_watt
-          bulb_qty
-          bulb
-          sku
-          finish
         }
       }
     }
